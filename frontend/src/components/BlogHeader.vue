@@ -1,7 +1,7 @@
 
 <template>
     <div id="header">
-        <h1>My Django Vue Blog</h1>
+        <h1> Djaong-RestFrameWork-Vue Project</h1>
         <hr>
     </div>
 </template>
