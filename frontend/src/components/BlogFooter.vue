@@ -3,7 +3,7 @@
     <!--  br 标签给页脚留出位置  -->
     <br><br><br>
     <div id="footer">
-        <p>dusaiphoto.com</p>
+        <p>rose-jack-tantanic.com</p>
     </div>
 </template>
 
