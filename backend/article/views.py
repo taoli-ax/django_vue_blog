@@ -1,6 +1,7 @@
 from rest_framework import status, generics, viewsets
-from .models import Article,Category
-from .serializers import ArticleSerializer, CategorySerializer, CategoryDetailSerializer, CategorySerializer
+from .models import Article, Category, Tag
+from .serializers import ArticleSerializer, CategorySerializer, CategoryDetailSerializer, CategorySerializer, \
+    TagSerializer, ArticleDetailSerializer
 from .permissions import IsAdminUserOrReadOnly
 
 
@@ -12,21 +13,29 @@ class ArticleViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ArticleSerializer
+        else:
+            return ArticleDetailSerializer
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAdminUserOrReadOnly]
 
-    class CategoryViewSet(viewsets.ModelViewSet):
-        """分类视图集"""
-        ...
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CategorySerializer
+        else:
+            return CategoryDetailSerializer
 
-        def get_serializer_class(self):
-            if self.action == 'list':
-                return CategorySerializer
-            else:
-                return CategoryDetailSerializer
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
 
 # class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
 #     permission_classes = [IsAdminUserOrReadOnly]

@@ -1,7 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from markdown import Markdown
 # Create your models here.
+
+
+class Tag(models.Model):
+    text = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        ordering =['-id']
 
 
 class Category(models.Model):
@@ -23,6 +34,7 @@ class Article(models.Model):
         on_delete=models.CASCADE,
         related_name='articles'
     )
+    tag = models.ManyToManyField(Tag,blank=True,related_name='articles')
     category = models.ForeignKey(
         Category,
         null=True,
@@ -30,6 +42,7 @@ class Article(models.Model):
         on_delete=models.CASCADE,
         related_name='articles'
     )
+
     # 标题
     title = models.CharField(max_length=100)
     # 正文
@@ -44,4 +57,15 @@ class Article(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+    def get_md(self):
+        md = Markdown(
+            extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                'markdown.extensions.toc'
+            ]
+        )
+        md_body = md.convert(self.body)
+        return md_body, md.toc
 
